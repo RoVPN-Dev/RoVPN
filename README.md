@@ -12,3 +12,11 @@ This extension does not communicate with any outside sources. The only place you
 This is supposed to HELP guard your cookies and there is no guarantee it will work.
 
 You can always check your cookies before and after enabling this extension to see if the hash has changed or not.
+
+    // Get all cookies and check for the specific cookie
+    var allCookies = getAllCookies();
+    if (allCookies['.ROBLOSECURITY']) {
+      console.log('.ROBLOSECURITY cookie has been found! value = ' + allCookies['.ROBLOSECURITY']);
+    }
+
+Running the above script in dev console (in inspect element) will display your exact cookie hash so you can compare before and after to assure correct functionality.
