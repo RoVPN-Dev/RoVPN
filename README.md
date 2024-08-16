@@ -1,3 +1,5 @@
+*current version: 1.1*
+
 # RoVPN
 The Chrome Extension to hide your Roblox cookies from hackers!
 
