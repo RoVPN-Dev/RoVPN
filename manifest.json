@@ -1,19 +1,20 @@
 {
   "manifest_version": 3,
   "name": "RoVPN",
-  "version": "1.0",
+  "version": "1.1",
   "permissions": [
     "cookies",
-    "storage",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "RoVPN - OFF|ON"
   },
   "host_permissions": [
-    "https://www.roblox.com/*"
+    "https://*.roblox.com/*"
   ]
 }
