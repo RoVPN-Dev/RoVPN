@@ -1,33 +1,29 @@
-chrome.runtime.onInstalled.addListener(() => {
-    console.log('Extension Installed');
-});
+const COOKIE_NAME = ".ROBLOSECURITY";
+const COOKIE_DOMAIN = ".roblox.com";
+const STORAGE_KEY = "originalRobloxCookie";
 
 // Function to get the .ROBLOSECURITY cookie
 function getRobloxSecurityCookie(callback) {
-    chrome.cookies.get({ url: "https://www.roblox.com", name: ".ROBLOSECURITY" }, (cookie) => {
-        if (cookie) {
-            callback(cookie.value);
-        } else {
-            callback(null);
-        }
+    chrome.cookies.get({ url: "https://www.roblox.com", name: COOKIE_NAME }, (cookie) => {
+        callback(cookie ? cookie.value : null);
     });
 }
 
-// Save cookie for later use
-function saveCookie(cookieValue) {
-    chrome.storage.local.set({ savedCookie: cookieValue }, () => {
+// Function to save the original cookie value
+function saveOriginalCookie(cookieValue) {
+    chrome.storage.local.set({ [STORAGE_KEY]: cookieValue }, () => {
         console.log('Cookie saved:', cookieValue);
     });
 }
 
-// Retrieve saved cookie
+// Function to retrieve the saved cookie value
 function getSavedCookie(callback) {
-    chrome.storage.local.get('savedCookie', (data) => {
-        callback(data.savedCookie || null);
+    chrome.storage.local.get([STORAGE_KEY], (data) => {
+        callback(data[STORAGE_KEY] || null);
     });
 }
 
-// Replace first 10 digits of the cookie with '1's
+// Function to modify the cookie value
 function modifyCookie(cookieValue) {
     if (cookieValue.length >= 10) {
         return '1111111111' + cookieValue.slice(10);
@@ -35,12 +31,13 @@ function modifyCookie(cookieValue) {
     return null;
 }
 
-// Set a new .ROBLOSECURITY cookie
+// Function to set the modified .ROBLOSECURITY cookie
 function setRobloxSecurityCookie(newValue) {
     chrome.cookies.set({
         url: "https://www.roblox.com",
-        name: ".ROBLOSECURITY",
+        name: COOKIE_NAME,
         value: newValue,
+        domain: COOKIE_DOMAIN,
         path: '/',
         secure: true,
         httpOnly: true
@@ -49,12 +46,12 @@ function setRobloxSecurityCookie(newValue) {
     });
 }
 
-// Listen for messages from the popup
+// Listens for messages from the popup to toggle or restore the cookie
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "toggleCookie") {
         getRobloxSecurityCookie((originalCookie) => {
             if (originalCookie) {
-                saveCookie(originalCookie);
+                saveOriginalCookie(originalCookie);
                 const modifiedCookie = modifyCookie(originalCookie);
                 setRobloxSecurityCookie(modifiedCookie);
                 sendResponse({ status: "Cookie modified and saved." });
@@ -72,5 +69,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
         });
     }
-    return true;  // Keep the message channel open for async response
+    return true;
 });
