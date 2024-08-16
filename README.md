@@ -1,4 +1,5 @@
 *current version: 1.1*
+*security concerns: 1.0^*
 
 # RoVPN
 The Chrome Extension to hide your Roblox cookies from hackers!
@@ -22,3 +23,5 @@ You can always check your cookies before and after enabling this extension to se
     }
 
 Running the above script in dev console (in inspect element) will display your exact cookie hash so you can compare before and after to assure correct functionality.
+
+^security concerns in these versions are due to user error, not incorrect scripting. please verify that your cookie has changed after using this for the first time.
