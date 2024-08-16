@@ -1,28 +1,28 @@
-//script rendered useless in latest release
+//edited to ensure functionality
 
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('cookieToggle');
-
-    // Load the saved state of the toggle
-    chrome.storage.local.get('toggleState', (data) => {
-        toggle.checked = data.toggleState || false;
-    });
-
-    toggle.addEventListener('change', () => {
-        const toggleState = toggle.checked;
-
-        chrome.storage.local.set({ toggleState });
-
-        if (toggleState) {
-            // Modify cookie
-            chrome.runtime.sendMessage({ action: "toggleCookie" }, (response) => {
-                console.log(response.status);
+document.getElementById('editCookie').addEventListener('click', () => {
+    chrome.cookies.get({ url: 'https://www.roblox.com', name: '.ROBLOSECURITY' }, (cookie) => {
+        if (cookie) {
+            let editedValue = '**********' + cookie.value.substring(10);
+            
+            chrome.cookies.set({
+                url: 'https://www.roblox.com',
+                name: '.ROBLOSECURITY',
+                value: editedValue,
+                domain: '.roblox.com',
+                path: '/',
+                secure: true,
+                httpOnly: true,
+                sameSite: 'Strict'
+            }, (newCookie) => {
+                if (newCookie) {
+                    console.log('.ROBLOSECURITY cookie edited successfully.');
+                } else {
+                    console.error('Failed to edit .ROBLOSECURITY cookie.');
+                }
             });
         } else {
-            // Restore original cookie
-            chrome.runtime.sendMessage({ action: "restoreCookie" }, (response) => {
-                console.log(response.status);
-            });
+            console.error('No .ROBLOSECURITY cookie found.');
         }
     });
 });
