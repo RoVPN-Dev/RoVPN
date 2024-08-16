@@ -1,3 +1,5 @@
+//script rendered useless in latest release
+
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('cookieToggle');
 
