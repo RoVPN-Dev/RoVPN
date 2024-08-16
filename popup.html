@@ -3,15 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cookie Toggle</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Roblox Cookie Modifier</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin-top: 10px; padding: 8px 12px; }
+    </style>
 </head>
 <body>
-    <h2>RoVPN - OFF|ON</h2>
-    <label class="switch">
-        <input type="checkbox" id="cookieToggle">
-        <span class="slider round"></span>
-    </label>
+    <h1>Roblox Cookie Modifier</h1>
+    <button id="toggleCookie">Modify Cookie</button>
+    <button id="restoreCookie">Restore Cookie</button>
+    <div id="status"></div>
+
+    <script>
+        document.getElementById('toggleCookie').addEventListener('click', () => {
+            chrome.runtime.sendMessage({ action: "toggleCookie" }, (response) => {
+                document.getElementById('status').textContent = response.status;
+            });
+        });
+
+        document.getElementById('restoreCookie').addEventListener('click', () => {
+            chrome.runtime.sendMessage({ action: "restoreCookie" }, (response) => {
+                document.getElementById('status').textContent = response.status;
+            });
+        });
+    </script>
 </body>
-<script src="popup.js"></script>
 </html>
